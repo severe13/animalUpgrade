@@ -1,10 +1,11 @@
 $(document).ready(function(){
 
 
-function Animal (name, speed, focus){
+function Animal (name, speed, focus, nickname){
     this.name = name;
     this.speed = speed;
     this.focus = focus;
+    this.nickname = nickname;
     this.hasWon = function(){return (this.position > 100);};
     this.isStillRacing = true;
     this.position = 0;
@@ -15,62 +16,57 @@ function Animal (name, speed, focus){
       if (this.isFocused()) {
         this.position += this.speed;
 
-        $("#Bugs").animate("left", this.position)
-        console.log(this.postion);
+        $(this.nickname).animate({left: this.position*10},500);
+        console.log(this.nickname);
+        console.log(this.position);
 
         }
       }
     }
-  //$("#Bugs")
   
-  var rabbit = new Animal ("Bugs", 8, 3);
-  var turtle = new Animal ("Poky", 3, 7);
-  var horse = new Animal ("Henry", 2, 9);
-  var dog = new Animal ("Bella", 4, 5);
+  var output = $('#header');
+  var rabbit = new Animal ("Bugs", 5, 3,"#rabbit" );
+  var turtle = new Animal ("Poky", 3, 7, "#turtle");
+  var horse = new Animal ("Henry", 7, 6, "#horse");
+  var dog = new Animal ("Bella", 6, 5, "#dog");
   var meters= 100;
+    console.log("create animals");
   
 
-  $("#myButton").click(function() {
-    alert("button clicked");
+  $(".myButton").click(function() {
+    output.text("The Race has Started!");
 
-  if (rabbit.position < meters && turtle.position < meters && horse.position < meters && dog.position < meters) {
+  var raceFunction = setInterval(function(){
 
     rabbit.advance();
     turtle.advance();
     horse.advance();
     dog.advance();
 
-  } else {
+  if(rabbit.position > meters || turtle.position > meters || horse.position > meters || dog.position > meters) {
+    clearInterval(raceFunction);
+  }; 
 
-   
+  },500);
 
-      if(rabbit.hasWon() && turtle.hasWon() && horse.hasWon() && dog.hasWon()) {
+    if(rabbit.hasWon() && turtle.hasWon() && horse.hasWon() && dog.hasWon()) {
         raceStatus = "It's a tie!";
         rabbit.isStillRacing = false; turtle.isStillRacing= false; horse.isStillRacing = false; dog.isStillRacing = false;
 
       } else if (rabbit.hasWon()) {
-          raceStatus = alert("Bugs has won the race!  Congratulations!");
+          output.text("Bugs has won the race!  Congratulations!");
           rabbit.isStillRacing = false;
 
       } else if (turtle.hasWon()) {
-          raceStatus = alert("Poky has won the race! Congratulations! ");
+          output.text("Poky has won the race! Congratulations! ");
           turtle.isStillRacing = false;
       } else if (horse.hasWon()) {
-          raceStatus = alert("Henry has won the race! Congratulations!");
+          output.text("Henry has won the race! Congratulations!");
           horse.isStillRacing = false;
       } else if (dog.hasWon()) {
-          raceStatus = alert("Bella has won the race! Congratulations! ");
-          dog.isStillRacing = false;
-
-      
-    }
-    
-      $("#myButton").html("")("<br>And the winner is:<p> + winner + !</p><br>")
-    
-    
-    
-  
-    }
+          output.text("Bella has won the race! Congratulations! ");
+          dog.isStillRacing = false
+      }
   })
 });
   
